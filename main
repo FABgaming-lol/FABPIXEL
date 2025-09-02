@@ -1,0 +1,352 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Sun, Moon, Palette, Brush, Zap, Users, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+
+export default function FabpixelLanding() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [isMounted, setIsMounted] = useState(false);
+  
+  // Background image URL - replace with your image path
+  const backgroundImage = "/path/to/your/background.jpg";
+  
+  // Pricing image URL - replace with your image path
+  const pricingImage = "/path/to/your/pricing.jpg";
+
+  useEffect(() => {
+    setIsMounted(true);
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("dark");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      localStorage.setItem("theme", theme);
+    }
+  }, [theme, isMounted]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  const services = [
+    {
+      icon: <Palette className="h-10 w-10" />,
+      title: "Brand Identity",
+      description: "Crafting unique visual identities that tell your story"
+    },
+    {
+      icon: <Brush className="h-10 w-10" />,
+      title: "UI/UX Design",
+      description: "Intuitive interfaces that enhance user experiences"
+    },
+    {
+      icon: <Zap className="h-10 w-10" />,
+      title: "Motion Graphics",
+      description: "Dynamic visuals that bring your brand to life"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-hidden relative">
+      {/* Custom Background */}
+      <div 
+        className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
+        <div className="absolute inset-0 bg-background/80 dark:bg-background/90"></div>
+      </div>
+
+      {/* Header */}
+      <header className="container mx-auto px-4 py-6 flex justify-between items-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center gap-3"
+        >
+          {/* Logo Placeholder */}
+          <div className="bg-gradient-to-br from-blue-500 to-purple-600 w-12 h-12 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-xl">FP</span>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">FABPIXEL</h1>
+            <p className="text-xs text-muted-foreground -mt-1">Creative Studio</p>
+          </div>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center gap-2"
+        >
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="rounded-full border border-border"
+          >
+            {theme === "light" ? (
+              <Moon className="h-5 w-5" />
+            ) : (
+              <Sun className="h-5 w-5" />
+            )}
+          </Button>
+        </motion.div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-12 md:py-20 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12">
+          <motion.div 
+            className="flex-1"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+          >
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold max-w-2xl mb-6">
+              Transforming Ideas Into <span className="text-primary">Visual Experiences</span>
+            </h2>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-xl mb-10">
+              We create stunning designs that captivate audiences and elevate brands to new heights through innovative visual storytelling.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button size="lg" className="px-8 py-6 text-lg group">
+                Start a Project
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+              <Button size="lg" variant="outline" className="px-8 py-6 text-lg border-border">
+                View Our Work
+              </Button>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="flex-1 w-full"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            {/* Banner Placeholder */}
+            <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl">
+              <div className="bg-gradient-to-br from-blue-400 to-purple-500 w-full h-80 md:h-96 flex items-center justify-center">
+                <div className="text-white text-center p-6">
+                  <h3 className="text-2xl font-bold mb-2">FABPIXEL Banner</h3>
+                  <p className="opacity-90">Creative Design Solutions</p>
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="container mx-auto px-4 py-16 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Services</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            We offer a comprehensive range of design services to bring your vision to life
+          </p>
+        </motion.div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Card className="border-border bg-card/80 backdrop-blur-sm h-full transition-all hover:shadow-xl hover:-translate-y-1">
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-6 text-primary">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{service.title}</h3>
+                  <p className="text-muted-foreground">{service.description}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="container mx-auto px-4 py-16 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12">
+          <motion.div 
+            className="flex-1"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl w-full h-80 md:h-96 flex items-center justify-center border border-border shadow-xl">
+              <div className="text-white text-center p-6">
+                <Users className="h-16 w-16 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold">Our Creative Team</h3>
+              </div>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="flex-1"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">About FABPIXEL</h2>
+            <p className="text-muted-foreground mb-6">
+              Founded in 2015, FABPIXEL has been at the forefront of digital design innovation. 
+              Our team of passionate designers combines creativity with technical expertise to 
+              deliver exceptional results.
+            </p>
+            <p className="text-muted-foreground mb-8">
+              We believe that great design is not just about aesthetics—it's about solving problems, 
+              communicating messages, and creating meaningful connections between brands and their audiences.
+            </p>
+            <div className="flex items-center gap-4">
+              <div className="bg-primary/10 p-4 rounded-full">
+                <Users className="h-10 w-10 text-primary" />
+              </div>
+              <div>
+                <p className="text-3xl font-bold">50+</p>
+                <p className="text-muted-foreground">Happy Clients</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="container mx-auto px-4 py-16 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Pricing</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Transparent pricing tailored to your project needs
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="max-w-4xl mx-auto"
+        >
+          <Card className="border-border bg-card/80 backdrop-blur-sm overflow-hidden">
+            <CardContent className="p-0">
+              {pricingImage ? (
+                <img 
+                  src={pricingImage} 
+                  alt="Pricing" 
+                  className="w-full h-auto object-contain"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-border rounded-lg">
+                  <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">Pricing Image</h3>
+                  <p className="text-muted-foreground">
+                    Add your pricing image by updating the pricingImage variable in the code
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-24 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl p-12 shadow-2xl text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjAuNSIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')] opacity-20"></div>
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Elevate Your Brand?</h2>
+              <p className="text-white/90 mb-8 max-w-2xl mx-auto">
+                Let's create something amazing together. Get in touch with us today to discuss your project.
+              </p>
+              <Button size="lg" className="px-8 py-6 text-lg bg-white text-primary hover:bg-white/90">
+                Contact Us
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-muted/20 backdrop-blur-sm py-12 relative z-10">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mb-6 md:mb-0 flex items-center gap-3"
+            >
+              <div className="bg-gradient-to-br from-blue-500 to-purple-600 w-10 h-10 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold">FP</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold">FABPIXEL</h3>
+                <p className="text-xs text-muted-foreground -mt-1">Creative Studio</p>
+              </div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="flex flex-col items-center md:items-end"
+            >
+              <p className="text-muted-foreground mb-2">contact@fabpixel.com</p>
+              <p className="text-muted-foreground">+1 (555) 123-4567</p>
+            </motion.div>
+          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-12 pt-8 border-t border-border text-center text-muted-foreground"
+          >
+            <p>© {new Date().getFullYear()} FABPIXEL. All rights reserved.</p>
+          </motion.div>
+        </div>
+      </footer>
+    </div>
+  );
+}
